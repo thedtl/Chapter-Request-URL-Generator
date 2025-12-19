@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter Link Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 800px;
+        }
+        h1 { margin-top: 0; font-size: 24px; color: #111; text-align: center; }
+        p { color: #666; margin-bottom: 25px; text-align: center; }
+        
+        label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            margin-top: 20px;
+        }
+        label:first-of-type { margin-top: 0; }
+        
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            box-sizing: border-box;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+        }
+        input:focus, textarea:focus { border-color: #0061fe; }
+        
+        .input-hint {
+            font-size: 12px;
+            color: #888;
+            margin-top: 6px;
+        }
+        
+        .chapter-list {
+            margin-top: 20px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        .chapter-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .chapter-row input {
+            margin: 0;
+            padding: 10px;
+        }
+        .chapter-row input.chapter-title { flex: 3; }
+        .chapter-row input.chapter-pages { flex: 1; width: 80px; }
+        .chapter-row button {
+            padding: 10px 14px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .chapter-row button:hover { background: #c82333; }
+        
+        .add-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .add-btn:hover { background: #218838; }
+        
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        .generate-btn {
+            flex: 1;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #0061fe;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+        .generate-btn:hover { background: #004bb5; }
+        .clear-btn {
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #f8f9fa;
+            color: #666;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+        }
+        .clear-btn:hover { background: #e9ecef; }
+        
+        #results {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .result-wrapper { position: relative; margin-bottom: 20px; }
+        .code-box {
+            background: #f8f9fa;
+            padding: 15px;
+            padding-right: 80px;
+            border: 1px solid #e1e1e1;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 13px;
+            color: #444;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: white;
+            border: 1px solid #ccc;
+            color: #333;
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .copy-btn:hover { background: #eee; }
+        
+        .error { color: #dc3545; font-size: 14px; margin-top: 10px; display: none; }
+        
+        .section-divider {
+            margin: 25px 0;
+            border-top: 2px dashed #ddd;
+            position: relative;
+        }
+        .section-divider span {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 0 12px;
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Chapter Link Generator</h1>
+    <p>Generate chapter links for LibGuides from a single PDF</p>
+
+    <label>Dropbox Link (Full PDF)</label>
+    <input type="text" id="dropboxLink" placeholder="https://www.dropbox.com/...">
+    
+    <label>Book Title</label>
+    <input type="text" id="bookTitle" placeholder="e.g., Theological Education in 2050">
+
+    <label>Chapters</label>
+    <div class="chapter-list" id="chapterList">
+        <div class="chapter-row">
+            <input type="text" class="chapter-title" placeholder="Chapter title">
+            <input type="number" class="chapter-pages" placeholder="Start" min="1">
+            <input type="number" class="chapter-pages" placeholder="End" min="1">
+            <button onclick="removeChapter(this)">✕</button>
+        </div>
+    </div>
+    <button class="add-btn" onclick="addChapter()">+ Add Chapter</button>
+    
+    <div class="input-hint">Enter chapter titles and PDF page numbers (not printed book page numbers)</div>
+    
+    <div class="error" id="error"></div>
+
+    <div class="button-row">
+        <button class="generate-btn" onclick="generateLinks()">Generate Links</button>
+        <button class="clear-btn" onclick="clearForm()">Clear</button>
+    </div>
+
+    <div id="results" style="display:none;">
+        <label>Simple List (for LibGuides)</label>
+        <div class="result-wrapper">
+            <div class="code-box" id="listOutput"></div>
+            <button class="copy-btn" onclick="copyToClipboard('listOutput', this)">Copy</button>
+        </div>
+
+        <div class="section-divider"><span>Styled Version</span></div>
+
+        <label>Styled List (with CSS)</label>
+        <div class="result-wrapper">
+            <div class="code-box" id="styledOutput"></div>
+            <button class="copy-btn" onclick="copyToClipboard('styledOutput', this)">Copy</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- CONFIGURATION ---
+    const VIEWER_URL = "https://thedtl.github.io/chapter-pdf-reader/web/viewer.html";
+    const WORKER_URL = "https://restricteddropboxguard.ccrawford.workers.dev/";
+    // ---------------------
+
+    function addChapter() {
+        const list = document.getElementById('chapterList');
+        const row = document.createElement('div');
+        row.className = 'chapter-row';
+        row.innerHTML = `
+            <input type="text" class="chapter-title" placeholder="Chapter title">
+            <input type="number" class="chapter-pages" placeholder="Start" min="1">
+            <input type="number" class="chapter-pages" placeholder="End" min="1">
+            <button onclick="removeChapter(this)">✕</button>
+        `;
+        list.appendChild(row);
+    }
+
+    function removeChapter(btn) {
+        const rows = document.querySelectorAll('.chapter-row');
+        if (rows.length > 1) {
+            btn.parentElement.remove();
+        }
+    }
+
+    function generateLinks() {
+        const dropboxLink = document.getElementById('dropboxLink').value.trim();
+        const bookTitle = document.getElementById('bookTitle').value.trim();
+        const errorEl = document.getElementById('error');
+        errorEl.style.display = 'none';
+
+        if (!dropboxLink || !dropboxLink.includes('dropbox.com/')) {
+            errorEl.textContent = "Please enter a valid Dropbox link.";
+            errorEl.style.display = 'block';
+            return;
+        }
+
+        if (!bookTitle) {
+            errorEl.textContent = "Please enter a book title.";
+            errorEl.style.display = 'block';
+            return;
+        }
+
+        // Encode the Dropbox link
+        let base64Link;
+        try {
+            base64Link = btoa(encodeURIComponent(dropboxLink).replace(/%([0-9A-F]{2})/g,
+                function(match, p1) { return String.fromCharCode('0x' + p1); }
+            ));
+        } catch (e) {
+            errorEl.textContent = "Error encoding link.";
+            errorEl.style.display = 'block';
+            return;
+        }
+
+        const workerWithFile = `${WORKER_URL}?file=${base64Link}`;
+
+        // Gather chapters
+        const rows = document.querySelectorAll('.chapter-row');
+        const chapters = [];
+        
+        rows.forEach(row => {
+            const title = row.querySelector('.chapter-title').value.trim();
+            const inputs = row.querySelectorAll('.chapter-pages');
+            const start = parseInt(inputs[0].value);
+            const end = parseInt(inputs[1].value);
+            
+            if (title && start && end && start <= end) {
+                chapters.push({ title, start, end });
+            }
+        });
+
+        if (chapters.length === 0) {
+            errorEl.textContent = "Please add at least one chapter with valid page numbers.";
+            errorEl.style.display = 'block';
+            return;
+        }
+
+        // Build Simple List HTML
+        let simpleHtml = `<h3>${bookTitle}</h3>\n<ul>\n`;
+        
+        chapters.forEach(ch => {
+            const finalUrl = `${VIEWER_URL}?file=${encodeURIComponent(workerWithFile)}&start=${ch.start}&end=${ch.end}`;
+            simpleHtml += `  <li><a href="${finalUrl}" target="_blank" rel="noopener">${ch.title}</a></li>\n`;
+        });
+        
+        simpleHtml += `</ul>`;
+
+        // Build Styled List HTML
+        let styledHtml = `<style>
+.chapter-list { font-family: sans-serif; max-width: 600px; }
+.chapter-list h3 { margin-bottom: 16px; color: #111; }
+.chapter-list ul { list-style: none; padding: 0; margin: 0; }
+.chapter-list li { 
+    border: 1px solid #ddd; 
+    border-radius: 6px; 
+    margin-bottom: 8px; 
+    transition: all 0.2s;
+}
+.chapter-list li:hover { 
+    border-color: #0061fe; 
+    box-shadow: 0 2px 8px rgba(0,97,254,0.15);
+}
+.chapter-list a { 
+    display: block;
+    padding: 14px 18px;
+    text-decoration: none; 
+    color: #333;
+    font-weight: 500;
+}
+.chapter-list a:hover { color: #0061fe; }
+.chapter-list .pages {
+    font-size: 0.85em;
+    color: #888;
+    font-weight: 400;
+    margin-left: 8px;
+}
+</style>
+
+<div class="chapter-list">
+  <h3>${bookTitle}</h3>
+  <ul>
+`;
+        
+        chapters.forEach(ch => {
+            const finalUrl = `${VIEWER_URL}?file=${encodeURIComponent(workerWithFile)}&start=${ch.start}&end=${ch.end}`;
+            const pageCount = ch.end - ch.start + 1;
+            styledHtml += `    <li><a href="${finalUrl}" target="_blank" rel="noopener">${ch.title}<span class="pages">(${pageCount} pages)</span></a></li>\n`;
+        });
+        
+        styledHtml += `  </ul>
+</div>`;
+
+        document.getElementById('listOutput').textContent = simpleHtml;
+        document.getElementById('styledOutput').textContent = styledHtml;
+        document.getElementById('results').style.display = 'block';
+    }
+
+    function clearForm() {
+        document.getElementById('dropboxLink').value = '';
+        document.getElementById('bookTitle').value = '';
+        document.getElementById('chapterList').innerHTML = `
+            <div class="chapter-row">
+                <input type="text" class="chapter-title" placeholder="Chapter title">
+                <input type="number" class="chapter-pages" placeholder="Start" min="1">
+                <input type="number" class="chapter-pages" placeholder="End" min="1">
+                <button onclick="removeChapter(this)">✕</button>
+            </div>
+        `;
+        document.getElementById('error').style.display = 'none';
+        document.getElementById('results').style.display = 'none';
+    }
+
+    function copyToClipboard(elementId, btnElement) {
+        const text = document.getElementById(elementId).textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = btnElement.textContent;
+            btnElement.textContent = 'Copied!';
+            btnElement.style.background = '#d1e7dd';
+            btnElement.style.borderColor = '#badbcc';
+            btnElement.style.color = '#0f5132';
+            setTimeout(() => {
+                btnElement.textContent = originalText;
+                btnElement.style.background = 'white';
+                btnElement.style.borderColor = '#ccc';
+                btnElement.style.color = '#333';
+            }, 2000);
+        });
+    }
+
+    // Enter key triggers generate
+    document.getElementById('dropboxLink').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') generateLinks();
+    });
+    document.getElementById('bookTitle').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') generateLinks();
+    });
+</script>
+
+</body>
+</html>
