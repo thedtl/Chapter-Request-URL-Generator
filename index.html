@@ -27,14 +27,9 @@
             --gray-900: #111827;
             --radius: 10px;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -44,7 +39,6 @@
             line-height: 1.5;
         }
 
-        /* Header */
         .header {
             background: white;
             border-bottom: 1px solid var(--gray-200);
@@ -55,7 +49,7 @@
         }
 
         .header-content {
-            max-width: 1100px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 0 24px;
             display: flex;
@@ -92,14 +86,12 @@
             font-weight: 600;
         }
 
-        /* Main Container */
         .container {
-            max-width: 1100px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 32px 24px;
         }
 
-        /* Cards */
         .card {
             background: white;
             border-radius: var(--radius);
@@ -116,10 +108,7 @@
             gap: 12px;
         }
 
-        .card-header h2 {
-            font-size: 16px;
-            font-weight: 600;
-        }
+        .card-header h2 { font-size: 16px; font-weight: 600; }
 
         .card-header .step {
             background: var(--primary);
@@ -134,18 +123,10 @@
             font-weight: 600;
         }
 
-        .card-body {
-            padding: 24px;
-        }
+        .card-body { padding: 24px; }
 
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group:last-child {
-            margin-bottom: 0;
-        }
+        .form-group { margin-bottom: 20px; }
+        .form-group:last-child { margin-bottom: 0; }
 
         label {
             display: block;
@@ -155,9 +136,14 @@
             margin-bottom: 8px;
         }
 
+        .label-hint {
+            font-weight: 400;
+            color: var(--gray-500);
+            font-size: 13px;
+        }
+
         input[type="text"],
-        input[type="password"],
-        select {
+        input[type="password"] {
             width: 100%;
             padding: 12px 16px;
             font-size: 15px;
@@ -170,58 +156,21 @@
         }
 
         input[type="text"]:focus,
-        input[type="password"]:focus,
-        select:focus {
+        input[type="password"]:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(0, 97, 254, 0.1);
         }
 
-        input[type="text"]::placeholder {
+        input::placeholder {
             color: var(--gray-400);
         }
 
-        .input-with-button {
-            display: flex;
-            gap: 12px;
-        }
-
-        .input-with-button input {
-            flex: 1;
-        }
-
-        /* Checkboxes */
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--primary);
-            cursor: pointer;
-        }
-
-        .checkbox-item span {
-            font-size: 14px;
-            color: var(--gray-700);
-        }
-
-        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 12px 24px;
+            padding: 14px 28px;
             font-size: 15px;
             font-weight: 600;
             border-radius: 8px;
@@ -229,6 +178,7 @@
             transition: all 0.2s;
             border: none;
             font-family: inherit;
+            width: 100%;
         }
 
         .btn-primary {
@@ -236,40 +186,16 @@
             color: white;
         }
 
-        .btn-primary:hover {
-            background: var(--primary-hover);
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-primary:disabled { background: var(--gray-300); cursor: not-allowed; }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
         }
 
-        .btn-primary:disabled {
-            background: var(--gray-300);
-            cursor: not-allowed;
-        }
+        .btn-success:hover { background: #059669; }
 
-        .btn-secondary {
-            background: var(--gray-100);
-            color: var(--gray-700);
-        }
-
-        .btn-secondary:hover {
-            background: var(--gray-200);
-        }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--gray-600);
-            padding: 8px 12px;
-        }
-
-        .btn-ghost:hover {
-            background: var(--gray-100);
-        }
-
-        .btn-sm {
-            padding: 8px 16px;
-            font-size: 13px;
-        }
-
-        /* Status Messages */
         .status-bar {
             padding: 16px 24px;
             display: flex;
@@ -278,20 +204,9 @@
             font-size: 14px;
         }
 
-        .status-bar.loading {
-            background: var(--gray-50);
-            color: var(--gray-600);
-        }
-
-        .status-bar.success {
-            background: var(--success-bg);
-            color: #065f46;
-        }
-
-        .status-bar.error {
-            background: var(--error-bg);
-            color: #991b1b;
-        }
+        .status-bar.loading { background: var(--gray-50); color: var(--gray-600); }
+        .status-bar.success { background: var(--success-bg); color: #065f46; }
+        .status-bar.error { background: var(--error-bg); color: #991b1b; }
 
         .spinner {
             width: 20px;
@@ -302,203 +217,128 @@
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Chapter Results */
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-
-        .results-meta {
-            font-size: 14px;
-            color: var(--gray-500);
-        }
-
-        .results-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .chapter-list {
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .chapter-item {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--gray-100);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            transition: background 0.15s;
-        }
-
-        .chapter-item:last-child {
-            border-bottom: none;
-        }
-
-        .chapter-item:hover {
+        .result-info {
             background: var(--gray-50);
-        }
-
-        .chapter-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .chapter-title {
-            font-weight: 600;
-            font-size: 15px;
-            color: var(--gray-900);
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .chapter-meta {
-            font-size: 13px;
-            color: var(--gray-500);
-        }
-
-        .chapter-actions {
-            display: flex;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
-        .btn-icon {
-            width: 36px;
-            height: 36px;
-            padding: 0;
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-icon svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Copy feedback */
-        .copied {
-            background: var(--success-bg) !important;
-            color: #065f46 !important;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 40px;
-            color: var(--gray-500);
-        }
-
-        .empty-state h3 {
-            font-size: 18px;
-            color: var(--gray-700);
-            margin-bottom: 8px;
-        }
-
-        /* Options Row */
-        .options-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-        }
-
-        .tooltip-text {
-            visibility: hidden;
-            background: var(--gray-800);
-            color: white;
-            text-align: center;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .tooltip:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        /* Password visibility toggle */
-        .password-wrapper {
-            position: relative;
-        }
-
-        .password-wrapper input {
-            padding-right: 50px;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--gray-400);
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .password-toggle:hover {
+            padding: 16px;
+            margin-bottom: 20px;
+            font-size: 14px;
             color: var(--gray-600);
         }
 
-        /* Responsive */
-        @media (max-width: 640px) {
-            .header-content {
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .input-with-button {
-                flex-direction: column;
-            }
-
-            .chapter-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .chapter-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
-
-            .options-row {
-                grid-template-columns: 1fr;
-            }
+        .result-info strong {
+            color: var(--gray-800);
         }
+
+        .code-output {
+            background: var(--gray-900);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .code-output pre {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            color: #e5e7eb;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin: 0;
+        }
+
+        .copy-success {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: var(--success-bg);
+            color: #065f46;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        .copy-success.show {
+            display: flex;
+        }
+
+        .preview-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .preview-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+            margin-bottom: 12px;
+        }
+
+        .preview-box {
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 16px;
+            background: white;
+        }
+
+        @media (max-width: 640px) {
+            .header-content { flex-direction: column; gap: 12px; }
+        }
+
+        /* Preview Accordion Styles */
+        .dtl-chapters { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .dtl-chapters-header {
+            background: #f8f9fa;
+            padding: 14px 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 6px;
+            transition: background 0.2s;
+            user-select: none;
+        }
+        .dtl-chapters-header:hover { background: #f0f0f0; }
+        .dtl-chapters-arrow {
+            transition: transform 0.2s;
+            font-size: 12px;
+            color: #666;
+        }
+        .dtl-chapters.open .dtl-chapters-arrow { transform: rotate(90deg); }
+        .dtl-chapters-citation {
+            font-weight: 600;
+            font-size: 15px;
+            color: #333;
+        }
+        .dtl-chapters-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .dtl-chapters.open .dtl-chapters-list { max-height: 2000px; }
+        .dtl-chapters-list ul {
+            list-style: none;
+            padding: 12px 0 12px 28px;
+            margin: 0;
+        }
+        .dtl-chapters-list li { padding: 8px 0; }
+        .dtl-chapters-list a {
+            color: #0061fe;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .dtl-chapters-list a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="header-content">
             <div class="logo">
@@ -509,73 +349,34 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="container">
-        <!-- Step 1: Authentication -->
+        <!-- Step 1: Book Info -->
         <div class="card">
             <div class="card-header">
                 <span class="step">1</span>
-                <h2>Staff Authentication</h2>
+                <h2>Book Information</h2>
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <label for="password">Staff Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="password" placeholder="Enter staff password">
-                        <button type="button" class="password-toggle" onclick="togglePassword()">
-                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                        </button>
-                    </div>
+                    <label for="citation">Citation <span class="label-hint">(First Last, Book Title)</span></label>
+                    <input type="text" id="citation" placeholder="John Smith, A History of Ancient Rome">
                 </div>
-            </div>
-        </div>
-
-        <!-- Step 2: PDF Input -->
-        <div class="card">
-            <div class="card-header">
-                <span class="step">2</span>
-                <h2>Select PDF</h2>
-            </div>
-            <div class="card-body">
                 <div class="form-group">
                     <label for="dropboxUrl">Dropbox Link</label>
-                    <div class="input-with-button">
-                        <input type="text" id="dropboxUrl" placeholder="https://www.dropbox.com/...">
-                        <button class="btn btn-primary" onclick="analyzePDF()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg>
-                            Analyze
-                        </button>
-                    </div>
+                    <input type="text" id="dropboxUrl" placeholder="https://www.dropbox.com/...">
                 </div>
             </div>
         </div>
 
-        <!-- Step 3: Options -->
+        <!-- Generate Button -->
         <div class="card">
-            <div class="card-header">
-                <span class="step">3</span>
-                <h2>Link Options</h2>
-            </div>
             <div class="card-body">
-                <div class="form-group">
-                    <label>Permissions</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-item">
-                            <input type="checkbox" id="allowDownload">
-                            <span>Allow download</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" id="includeChapterName" checked>
-                            <span>Include chapter name</span>
-                        </label>
-                    </div>
-                </div>
+                <button class="btn btn-primary" onclick="analyzePDF()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                    Generate Code
+                </button>
             </div>
         </div>
 
@@ -583,19 +384,42 @@
         <div class="card" id="resultsCard" style="display: none;">
             <div class="card-header">
                 <span class="step">✓</span>
-                <h2>Generated Links</h2>
+                <h2>Ready to Copy</h2>
             </div>
             
-            <!-- Status Bar -->
             <div class="status-bar" id="statusBar" style="display: none;"></div>
             
             <div class="card-body" id="resultsBody">
-                <!-- Results populate here -->
+                <div class="result-info" id="resultInfo"></div>
+                
+                <div class="code-output">
+                    <pre id="codeOutput"></pre>
+                </div>
+                
+                <button class="btn btn-success" onclick="copyCode()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copy Code to Clipboard
+                </button>
+                
+                <div class="copy-success" id="copySuccess">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    Copied! Paste into LibGuides.
+                </div>
+                
+                <div class="preview-section">
+                    <div class="preview-label">Preview (how it will look)</div>
+                    <div class="preview-box" id="previewBox"></div>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     
     <script>
@@ -605,63 +429,44 @@
         const VIEWER_URL = "https://thedtl.github.io/chapter-pdf-reader/web/viewer.html";
         const WORKER_URL = "https://dtl-secure-worker.ccrawford.workers.dev";
 
-        // Configure PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
         // =============================================================
         // STATE
         // =============================================================
-        let extractedChapters = [];
-        let signedTokens = [];
-        let currentDropboxUrl = '';
-        let pdfTotalPages = 0;
+        let generatedCode = '';
 
         // =============================================================
         // UI HELPERS
         // =============================================================
-        function togglePassword() {
-            const input = document.getElementById('password');
-            const icon = document.getElementById('eyeIcon');
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
-            } else {
-                input.type = 'password';
-                icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
-            }
-        }
-
         function showStatus(message, type = 'loading') {
             const card = document.getElementById('resultsCard');
             const bar = document.getElementById('statusBar');
+            const body = document.getElementById('resultsBody');
             
             card.style.display = 'block';
             bar.style.display = 'flex';
             bar.className = 'status-bar ' + type;
+            body.style.display = type === 'loading' ? 'none' : 'block';
             
             if (type === 'loading') {
-                bar.innerHTML = `<div class="spinner"></div><span>${message}</span>`;
+                bar.innerHTML = '<div class="spinner"></div><span>' + message + '</span>';
             } else if (type === 'error') {
-                bar.innerHTML = `<span>❌</span><span>${message}</span>`;
+                bar.innerHTML = '<span>❌</span><span>' + message + '</span>';
             } else if (type === 'success') {
-                bar.innerHTML = `<span>✅</span><span>${message}</span>`;
-                setTimeout(() => { bar.style.display = 'none'; }, 3000);
+                bar.style.display = 'none';
             }
         }
 
-        function hideStatus() {
-            document.getElementById('statusBar').style.display = 'none';
-        }
-
         // =============================================================
-        // MAIN ANALYSIS FUNCTION
+        // MAIN FUNCTION
         // =============================================================
         async function analyzePDF() {
-            const password = document.getElementById('password').value;
+            const citation = document.getElementById('citation').value.trim();
             const dropboxUrl = document.getElementById('dropboxUrl').value.trim();
             
-            if (!password) {
-                showStatus('Please enter the staff password', 'error');
+            if (!citation) {
+                showStatus('Please enter the book citation', 'error');
                 return;
             }
             
@@ -675,13 +480,11 @@
                 return;
             }
 
-            currentDropboxUrl = dropboxUrl;
             showStatus('Loading PDF and extracting chapters...');
             
             try {
-                // First, get a temporary signed token to load the PDF
-                const tempResponse = await fetch(`${WORKER_URL}/sign?` + new URLSearchParams({
-                    password: password,
+                // Get temp token to load PDF
+                const tempResponse = await fetch(WORKER_URL + '/sign?' + new URLSearchParams({
                     dropbox: dropboxUrl,
                     start: '1',
                     end: '99999',
@@ -691,38 +494,57 @@
                 const tempData = await tempResponse.json();
                 
                 if (tempData.error) {
-                    showStatus(tempData.error === 'Invalid password' ? 'Incorrect password' : tempData.error, 'error');
+                    showStatus(tempData.error, 'error');
                     return;
                 }
                 
-                // Load PDF with temp token
-                const proxyUrl = `${WORKER_URL}?token=${tempData.token}`;
+                // Load PDF
+                const proxyUrl = WORKER_URL + '?token=' + tempData.token;
                 const pdf = await pdfjsLib.getDocument({ url: proxyUrl }).promise;
-                pdfTotalPages = pdf.numPages;
+                const totalPages = pdf.numPages;
                 
                 // Get bookmarks
                 const outline = await pdf.getOutline();
                 
                 if (!outline || outline.length === 0) {
-                    showNoBookmarks();
+                    showStatus('No bookmarks found in this PDF. Add bookmarks first.', 'error');
                     return;
                 }
                 
                 // Extract chapters
-                extractedChapters = await extractChapters(pdf, outline);
+                const chapters = await extractChapters(pdf, outline, totalPages);
                 
-                if (extractedChapters.length === 0) {
-                    showNoBookmarks();
+                if (chapters.length === 0) {
+                    showStatus('Could not extract chapter information from bookmarks.', 'error');
                     return;
                 }
                 
-                // Sign all chapters via batch endpoint
+                // Sign all chapters
                 showStatus('Generating secure links...');
-                await signAllChapters(password);
                 
-                // Display results
-                displayResults();
-                showStatus(`Generated ${extractedChapters.length} chapter links`, 'success');
+                const signResponse = await fetch(WORKER_URL + '/batch-sign', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        dropbox: dropboxUrl,
+                        chapters: chapters.map(ch => ({
+                            title: ch.title,
+                            start: ch.start,
+                            end: ch.end
+                        })),
+                        download: false,
+                        expires: 0
+                    })
+                });
+                
+                const signData = await signResponse.json();
+                
+                if (signData.error) {
+                    throw new Error(signData.error);
+                }
+                
+                // Generate the final code
+                generateOutput(citation, chapters, signData.tokens, totalPages);
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -730,10 +552,7 @@
             }
         }
 
-        // =============================================================
-        // EXTRACT CHAPTERS
-        // =============================================================
-        async function extractChapters(pdf, outline) {
+        async function extractChapters(pdf, outline, totalPages) {
             const chapters = [];
             
             for (let i = 0; i < outline.length; i++) {
@@ -747,9 +566,9 @@
                     let endPage;
                     if (nextItem) {
                         const nextStart = await getPageNumber(pdf, nextItem);
-                        endPage = nextStart !== null ? nextStart - 1 : pdfTotalPages;
+                        endPage = nextStart !== null ? nextStart - 1 : totalPages;
                     } else {
-                        endPage = pdfTotalPages;
+                        endPage = totalPages;
                     }
                     
                     if (endPage < startPage) endPage = startPage;
@@ -757,11 +576,10 @@
                     chapters.push({
                         title: item.title.trim(),
                         start: startPage,
-                        end: endPage,
-                        pageCount: endPage - startPage + 1
+                        end: endPage
                     });
                 } catch (e) {
-                    console.warn(`Could not process: ${item.title}`, e);
+                    console.warn('Could not process bookmark:', e);
                 }
             }
             
@@ -780,168 +598,69 @@
             }
         }
 
-        // =============================================================
-        // SIGN CHAPTERS VIA WORKER
-        // =============================================================
-        async function signAllChapters(password) {
-            const includeChapterName = document.getElementById('includeChapterName').checked;
-            const allowDownload = document.getElementById('allowDownload').checked;
-            
-            const chapters = extractedChapters.map(ch => ({
-                title: includeChapterName ? ch.title : '',
-                start: ch.start,
-                end: ch.end
-            }));
-            
-            const response = await fetch(`${WORKER_URL}/batch-sign`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    password,
-                    dropbox: currentDropboxUrl,
-                    chapters,
-                    download: allowDownload,
-                    expires: 0
-                })
+        function getChapterUrl(token) {
+            const workerUrl = WORKER_URL + '?token=' + encodeURIComponent(token);
+            return VIEWER_URL + '?file=' + encodeURIComponent(workerUrl);
+        }
+
+        function generateOutput(citation, chapters, tokens, totalPages) {
+            // Build chapter links HTML
+            let linksHtml = '';
+            chapters.forEach((ch, i) => {
+                const url = getChapterUrl(tokens[i].token);
+                linksHtml += '      <li><a href="' + url + '" target="_blank" rel="noopener">' + escapeHtml(ch.title) + '</a></li>\n';
             });
+
+            // Generate the complete self-contained code
+            generatedCode = `<!-- ${escapeHtml(citation)} - Chapter Links -->
+<style>
+.dtl-chapters { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+.dtl-chapters-header { background: #f8f9fa; padding: 14px 18px; cursor: pointer; display: flex; align-items: center; gap: 10px; border-radius: 6px; transition: background 0.2s; user-select: none; }
+.dtl-chapters-header:hover { background: #f0f0f0; }
+.dtl-chapters-arrow { transition: transform 0.2s; font-size: 12px; color: #666; }
+.dtl-chapters.open .dtl-chapters-arrow { transform: rotate(90deg); }
+.dtl-chapters-citation { font-weight: 600; font-size: 15px; color: #333; }
+.dtl-chapters-list { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+.dtl-chapters.open .dtl-chapters-list { max-height: 2000px; }
+.dtl-chapters-list ul { list-style: none; padding: 12px 0 12px 28px; margin: 0; }
+.dtl-chapters-list li { padding: 8px 0; }
+.dtl-chapters-list a { color: #0061fe; text-decoration: none; font-size: 14px; }
+.dtl-chapters-list a:hover { text-decoration: underline; }
+</style>
+
+<div class="dtl-chapters">
+  <div class="dtl-chapters-header" onclick="this.parentElement.classList.toggle('open')" tabindex="0" onkeydown="if(event.key==='Enter')this.click()">
+    <span class="dtl-chapters-arrow">▶</span>
+    <span class="dtl-chapters-citation">${escapeHtml(citation)}</span>
+  </div>
+  <div class="dtl-chapters-list">
+    <ul>
+${linksHtml}    </ul>
+  </div>
+</div>`;
+
+            // Update result info
+            document.getElementById('resultInfo').innerHTML = 
+                '<strong>' + chapters.length + ' chapters</strong> from a ' + totalPages + '-page PDF';
             
-            const data = await response.json();
+            // Show code
+            document.getElementById('codeOutput').textContent = generatedCode;
             
-            if (data.error) {
-                throw new Error(data.error);
-            }
+            // Show preview
+            document.getElementById('previewBox').innerHTML = generatedCode;
             
-            signedTokens = data.tokens;
+            // Show results
+            showStatus('', 'success');
+            document.getElementById('resultsBody').style.display = 'block';
+            document.getElementById('copySuccess').classList.remove('show');
         }
 
-        // =============================================================
-        // DISPLAY RESULTS
-        // =============================================================
-        function displayResults() {
-            const body = document.getElementById('resultsBody');
-            
-            let html = `
-                <div class="results-header">
-                    <div class="results-meta">${extractedChapters.length} chapters · ${pdfTotalPages} total pages</div>
-                    <div class="results-actions">
-                        <button class="btn btn-secondary btn-sm" onclick="copyAllUrls()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                            Copy All URLs
-                        </button>
-                        <button class="btn btn-secondary btn-sm" onclick="exportCSV()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            Export CSV
-                        </button>
-                    </div>
-                </div>
-                <div class="chapter-list">
-            `;
-            
-            extractedChapters.forEach((chapter, i) => {
-                const token = signedTokens[i];
-                html += `
-                    <div class="chapter-item">
-                        <div class="chapter-info">
-                            <div class="chapter-title">${escapeHtml(chapter.title)}</div>
-                            <div class="chapter-meta">Pages ${chapter.start}–${chapter.end} · ${chapter.pageCount} pages</div>
-                        </div>
-                        <div class="chapter-actions">
-                            <button class="btn btn-secondary btn-icon tooltip" onclick="copyUrl(${i}, this)" title="Copy URL">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-                                <span class="tooltip-text">Copy link</span>
-                            </button>
-                            <button class="btn btn-secondary btn-icon tooltip" onclick="copyEmbed(${i}, this)" title="Copy Embed Code">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                                <span class="tooltip-text">Copy embed code</span>
-                            </button>
-                            <button class="btn btn-secondary btn-icon tooltip" onclick="previewChapter(${i})" title="Preview">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                                <span class="tooltip-text">Open preview</span>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += '</div>';
-            body.innerHTML = html;
-        }
-
-        function showNoBookmarks() {
-            const body = document.getElementById('resultsBody');
-            body.innerHTML = `
-                <div class="empty-state">
-                    <h3>No Chapter Bookmarks Found</h3>
-                    <p>This PDF doesn't have top-level bookmarks. Add bookmarks to the PDF first using your bookmark tool.</p>
-                </div>
-            `;
-            hideStatus();
-        }
-
-        // =============================================================
-        // COPY / EXPORT FUNCTIONS
-        // =============================================================
-        function getChapterUrl(index) {
-            const token = signedTokens[index].token;
-            const workerUrl = `${WORKER_URL}?token=${encodeURIComponent(token)}`;
-            return `${VIEWER_URL}?file=${encodeURIComponent(workerUrl)}`;
-        }
-
-        function copyUrl(index, btn) {
-            const url = getChapterUrl(index);
-            copyToClipboard(url, btn);
-        }
-
-        function copyEmbed(index, btn) {
-            const chapter = extractedChapters[index];
-            const url = getChapterUrl(index);
-            
-            const embed = `<!-- ${chapter.title} (Pages ${chapter.start}-${chapter.end}) -->
-<div style="text-align: right; margin-bottom: 8px;">
-    <a href="${url}" target="_blank" rel="noopener" style="text-decoration: none; color: #333; font-family: sans-serif; font-size: 0.9em; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; background-color: #f9f9f9;">
-        <span style="font-size: 1.1em; margin-right: 4px;">↗</span> Open Chapter
-    </a>
-</div>
-<iframe src="${url}" width="100%" height="700" style="border: 1px solid #ccc; border-radius: 4px;" referrerpolicy="origin" allowfullscreen></iframe>`;
-            
-            copyToClipboard(embed, btn);
-        }
-
-        function previewChapter(index) {
-            window.open(getChapterUrl(index), '_blank');
-        }
-
-        function copyAllUrls() {
-            const lines = extractedChapters.map((ch, i) => 
-                `${ch.title}\n${getChapterUrl(i)}`
-            ).join('\n\n');
-            
-            navigator.clipboard.writeText(lines).then(() => {
-                showStatus('All URLs copied to clipboard!', 'success');
-            });
-        }
-
-        function exportCSV() {
-            let csv = 'Chapter Title,Start Page,End Page,Page Count,URL\n';
-            
-            extractedChapters.forEach((ch, i) => {
-                const url = getChapterUrl(i);
-                csv += `"${ch.title.replace(/"/g, '""')}",${ch.start},${ch.end},${ch.pageCount},"${url}"\n`;
-            });
-            
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'chapter-links.csv';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        function copyToClipboard(text, btn) {
-            navigator.clipboard.writeText(text).then(() => {
-                btn.classList.add('copied');
-                setTimeout(() => btn.classList.remove('copied'), 2000);
+        function copyCode() {
+            navigator.clipboard.writeText(generatedCode).then(() => {
+                document.getElementById('copySuccess').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('copySuccess').classList.remove('show');
+                }, 3000);
             });
         }
 
@@ -956,7 +675,7 @@
             if (e.key === 'Enter') analyzePDF();
         });
         
-        document.getElementById('password').addEventListener('keypress', e => {
+        document.getElementById('citation').addEventListener('keypress', e => {
             if (e.key === 'Enter') document.getElementById('dropboxUrl').focus();
         });
     </script>
