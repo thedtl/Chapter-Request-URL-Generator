@@ -563,29 +563,17 @@
                 <h2>Link Options</h2>
             </div>
             <div class="card-body">
-                <div class="options-row">
-                    <div class="form-group">
-                        <label for="expiration">Link Expiration</label>
-                        <select id="expiration">
-                            <option value="0">Never expires</option>
-                            <option value="7">7 days</option>
-                            <option value="30" selected>30 days</option>
-                            <option value="90">90 days</option>
-                            <option value="365">1 year</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Permissions</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="allowDownload">
-                                <span>Allow download</span>
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="includeChapterName" checked>
-                                <span>Include chapter name</span>
-                            </label>
-                        </div>
+                <div class="form-group">
+                    <label>Permissions</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="allowDownload">
+                            <span>Allow download</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="includeChapterName" checked>
+                            <span>Include chapter name</span>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -618,7 +606,7 @@
         // CONFIGURATION
         // =============================================================
         const VIEWER_URL = "https://thedtl.github.io/Customizable-Reader/web/viewer.html";
-        const WORKER_URL = "https://restricteddropboxguard.ccrawford.workers.dev";
+        const WORKER_URL = "https://dtl-secure-worker.ccrawford.workers.dev";
 
         // Configure PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -804,7 +792,6 @@
         async function signAllChapters(password) {
             const includeChapterName = document.getElementById('includeChapterName').checked;
             const allowDownload = document.getElementById('allowDownload').checked;
-            const expires = parseInt(document.getElementById('expiration').value);
             
             const chapters = extractedChapters.map(ch => ({
                 title: includeChapterName ? ch.title : '',
@@ -820,7 +807,7 @@
                     dropbox: currentDropboxUrl,
                     chapters,
                     download: allowDownload,
-                    expires
+                    expires: 0
                 })
             });
             
@@ -838,12 +825,10 @@
         // =============================================================
         function displayResults() {
             const body = document.getElementById('resultsBody');
-            const expires = parseInt(document.getElementById('expiration').value);
-            const expiresText = expires === 0 ? 'never expire' : `expire in ${expires} days`;
             
             let html = `
                 <div class="results-header">
-                    <div class="results-meta">${extractedChapters.length} chapters · ${pdfTotalPages} total pages · Links ${expiresText}</div>
+                    <div class="results-meta">${extractedChapters.length} chapters · ${pdfTotalPages} total pages</div>
                     <div class="results-actions">
                         <button class="btn btn-secondary btn-sm" onclick="copyAllUrls()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
@@ -981,4 +966,5 @@
     </script>
 </body>
 </html>
+
 
