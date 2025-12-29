@@ -3,667 +3,982 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter Request URL Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <title>Chapter Link Generator | DTL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f6f8;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .card {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            width: 100%;
-            max-width: 900px;
-        }
-        h1 { margin-top: 0; font-size: 24px; color: #111; text-align: center; }
-        p.subtitle { color: #666; margin-bottom: 25px; text-align: center; }
-        
-        label {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #888;
-            font-weight: 600;
-            display: block;
-            margin-bottom: 8px;
-            margin-top: 20px;
-        }
-        label:first-of-type { margin-top: 0; }
-        
-        input, textarea {
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            border: 2px solid #e1e1e1;
-            border-radius: 8px;
-            box-sizing: border-box;
-            outline: none;
-            font-family: 'Inter', sans-serif;
-        }
-        input:focus, textarea:focus { border-color: #0061fe; }
-        
-        .input-row {
-            display: flex;
-            gap: 10px;
-            align-items: flex-end;
-        }
-        .input-row input { flex: 1; }
-        
-        .input-hint {
-            font-size: 12px;
-            color: #888;
-            margin-top: 6px;
-        }
-        
-        .scan-btn {
-            padding: 14px 24px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            white-space: nowrap;
-        }
-        .scan-btn:hover { background: #218838; }
-        .scan-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        
-        .status {
-            margin-top: 15px;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            display: none;
-        }
-        .status.loading {
-            display: block;
-            background: #e7f3ff;
-            color: #0056b3;
-            border: 1px solid #b8daff;
-        }
-        .status.success {
-            display: block;
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .status.warning {
-            display: block;
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
-        }
-        .status.error {
-            display: block;
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .chapter-section {
-            margin-top: 25px;
-            display: none;
-        }
-        .chapter-section.visible { display: block; }
-        
-        .chapter-list {
-            border: 2px solid #e1e1e1;
-            border-radius: 8px;
-            padding: 15px;
-            background: #f8f9fa;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        .chapter-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-        .chapter-row input {
-            margin: 0;
-            padding: 10px;
-            font-size: 14px;
-        }
-        .chapter-row input.chapter-title { flex: 3; }
-        .chapter-row input.chapter-pages { flex: 1; min-width: 70px; max-width: 90px; }
-        .chapter-row .remove-btn {
-            padding: 8px 12px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .chapter-row .remove-btn:hover { background: #c82333; }
-        
-        .chapter-actions {
-            margin-top: 10px;
-            display: flex;
-            gap: 10px;
-        }
-        .add-btn {
-            padding: 10px 20px;
-            background: #17a2b8;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .add-btn:hover { background: #138496; }
-        .clear-chapters-btn {
-            padding: 10px 20px;
-            background: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .clear-chapters-btn:hover { background: #5a6268; }
-        
-        .button-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-        .generate-btn {
-            flex: 1;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            background: #0061fe;
-            color: white;
-            border: none;
-            border-radius: 8px;
-        }
-        .generate-btn:hover { background: #004bb5; }
-        .generate-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        .clear-btn {
-            padding: 14px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            background: #f8f9fa;
-            color: #666;
-            border: 2px solid #e1e1e1;
-            border-radius: 8px;
-        }
-        .clear-btn:hover { background: #e9ecef; }
-        
-        #results {
-            margin-top: 30px;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-        }
-        .result-wrapper { position: relative; margin-bottom: 20px; }
-        .code-box {
-            background: #f8f9fa;
-            padding: 15px;
-            padding-right: 80px;
-            border: 1px solid #e1e1e1;
-            border-radius: 6px;
-            font-family: 'Monaco', 'Consolas', monospace;
-            font-size: 13px;
-            color: #444;
-            word-break: break-all;
-            max-height: 300px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-        }
-        .copy-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: white;
-            border: 1px solid #ccc;
-            color: #333;
-            padding: 6px 12px;
-            font-size: 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .copy-btn:hover { background: #eee; }
-        
-        .section-divider {
-            margin: 25px 0;
-            border-top: 2px dashed #ddd;
-            position: relative;
-        }
-        .section-divider span {
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            padding: 0 12px;
-            font-size: 11px;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        :root {
+            --primary: #0061fe;
+            --primary-hover: #004bb5;
+            --success: #10b981;
+            --success-bg: #d1fae5;
+            --warning: #f59e0b;
+            --warning-bg: #fef3c7;
+            --error: #ef4444;
+            --error-bg: #fee2e2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --radius: 10px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        .pdf-info {
-            margin-top: 15px;
-            padding: 12px 16px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #555;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        .pdf-info strong { color: #333; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--gray-900);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .staff-badge {
+            background: var(--warning-bg);
+            color: #92400e;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .card-header .step {
+            background: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.2s;
+            font-family: inherit;
+            background: white;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 97, 254, 0.1);
+        }
+
+        input[type="text"]::placeholder {
+            color: var(--gray-400);
+        }
+
+        .input-with-button {
+            display: flex;
+            gap: 12px;
+        }
+
+        .input-with-button input {
+            flex: 1;
+        }
+
+        /* Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .checkbox-item span {
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-primary:disabled {
+            background: var(--gray-300);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-200);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--gray-600);
+            padding: 8px 12px;
+        }
+
+        .btn-ghost:hover {
+            background: var(--gray-100);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        /* Status Messages */
+        .status-bar {
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .status-bar.loading {
+            background: var(--gray-50);
+            color: var(--gray-600);
+        }
+
+        .status-bar.success {
+            background: var(--success-bg);
+            color: #065f46;
+        }
+
+        .status-bar.error {
+            background: var(--error-bg);
+            color: #991b1b;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Chapter Results */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .results-meta {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chapter-list {
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .chapter-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            transition: background 0.15s;
+        }
+
+        .chapter-item:last-child {
+            border-bottom: none;
+        }
+
+        .chapter-item:hover {
+            background: var(--gray-50);
+        }
+
+        .chapter-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chapter-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chapter-meta {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .chapter-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Copy feedback */
+        .copied {
+            background: var(--success-bg) !important;
+            color: #065f46 !important;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 40px;
+            color: var(--gray-500);
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        /* Options Row */
+        .options-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            background: var(--gray-800);
+            color: white;
+            text-align: center;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Password visibility toggle */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 50px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray-400);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .password-toggle:hover {
+            color: var(--gray-600);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header-content {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .input-with-button {
+                flex-direction: column;
+            }
+
+            .chapter-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .chapter-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .options-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">📚</div>
+                <span>Chapter Link Generator</span>
+            </div>
+            <div class="staff-badge">🔒 Staff Tool</div>
+        </div>
+    </header>
 
-<div class="card">
-    <h1>Chapter Request URL Generator</h1>
-    <p class="subtitle">Auto-detect chapters from PDF or enter manually</p>
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Step 1: Authentication -->
+        <div class="card">
+            <div class="card-header">
+                <span class="step">1</span>
+                <h2>Staff Authentication</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="password">Staff Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="Enter staff password">
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <label>Dropbox Link (Full PDF)</label>
-    <div class="input-row">
-        <input type="text" id="dropboxLink" placeholder="https://www.dropbox.com/...">
-        <button class="scan-btn" id="scanBtn" onclick="scanPDF()">Scan PDF</button>
-    </div>
-    <div class="input-hint">Paste your Dropbox link and click "Scan PDF" to auto-detect chapters</div>
+        <!-- Step 2: PDF Input -->
+        <div class="card">
+            <div class="card-header">
+                <span class="step">2</span>
+                <h2>Select PDF</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="dropboxUrl">Dropbox Link</label>
+                    <div class="input-with-button">
+                        <input type="text" id="dropboxUrl" placeholder="https://www.dropbox.com/...">
+                        <button class="btn btn-primary" onclick="analyzePDF()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            Analyze
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Options -->
+        <div class="card">
+            <div class="card-header">
+                <span class="step">3</span>
+                <h2>Link Options</h2>
+            </div>
+            <div class="card-body">
+                <div class="options-row">
+                    <div class="form-group">
+                        <label for="expiration">Link Expiration</label>
+                        <select id="expiration">
+                            <option value="0">Never expires</option>
+                            <option value="7">7 days</option>
+                            <option value="30" selected>30 days</option>
+                            <option value="90">90 days</option>
+                            <option value="365">1 year</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Permissions</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="allowDownload">
+                                <span>Allow download</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="includeChapterName" checked>
+                                <span>Include chapter name</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="card" id="resultsCard" style="display: none;">
+            <div class="card-header">
+                <span class="step">✓</span>
+                <h2>Generated Links</h2>
+            </div>
+            
+            <!-- Status Bar -->
+            <div class="status-bar" id="statusBar" style="display: none;">
+                <div class="spinner"></div>
+                <span id="statusText">Loading...</span>
+            </div>
+            
+            <div class="card-body" id="resultsBody">
+                <!-- Results populate here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     
-    <div class="status" id="status"></div>
-    <div class="pdf-info" id="pdfInfo" style="display:none;"></div>
+    <script>
+        // =============================================================
+        // CONFIGURATION
+        // =============================================================
+        const VIEWER_URL = "https://thedtl.github.io/Customizable-Reader/web/viewer.html";
+        const WORKER_URL = "https://restricteddropboxguard.ccrawford.workers.dev";
 
-    <div class="chapter-section" id="chapterSection">
-        <label>Book Title</label>
-        <input type="text" id="bookTitle" placeholder="e.g., Theological Education in 2050">
-        
-        <label>Chapters</label>
-        <div class="chapter-list" id="chapterList"></div>
-        <div class="chapter-actions">
-            <button class="add-btn" onclick="addChapter()">+ Add Chapter</button>
-            <button class="clear-chapters-btn" onclick="clearChapters()">Clear All</button>
-        </div>
-        <div class="input-hint">Review and edit chapters as needed. Page numbers are PDF pages (not printed page numbers).</div>
+        // Configure PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-        <div class="button-row">
-            <button class="generate-btn" id="generateBtn" onclick="generateLinks()">Generate Links</button>
-            <button class="clear-btn" onclick="clearForm()">Start Over</button>
-        </div>
-    </div>
+        // =============================================================
+        // STATE
+        // =============================================================
+        let extractedChapters = [];
+        let signedTokens = [];
+        let currentDropboxUrl = '';
+        let pdfTotalPages = 0;
 
-    <div id="results" style="display:none;">
-        <label>Simple List (for LibGuides)</label>
-        <div class="result-wrapper">
-            <div class="code-box" id="listOutput"></div>
-            <button class="copy-btn" onclick="copyToClipboard('listOutput', this)">Copy</button>
-        </div>
-
-        <div class="section-divider"><span>Styled Version</span></div>
-
-        <label>Styled List (with CSS)</label>
-        <div class="result-wrapper">
-            <div class="code-box" id="styledOutput"></div>
-            <button class="copy-btn" onclick="copyToClipboard('styledOutput', this)">Copy</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    // --- CONFIGURATION ---
-    const VIEWER_URL = "https://thedtl.github.io/chapter-pdf-reader/web/viewer.html";
-    // UPDATED WORKER URL BELOW
-    const WORKER_URL = "https://chapterpdfrestrict.ccrawford.workers.dev/";
-    // ---------------------
-
-    // Initialize PDF.js worker
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-    let pdfDoc = null;
-    let totalPages = 0;
-
-    function setStatus(message, type) {
-        const status = document.getElementById('status');
-        status.textContent = message;
-        status.className = 'status ' + type;
-    }
-
-    function clearStatus() {
-        document.getElementById('status').className = 'status';
-        document.getElementById('status').textContent = '';
-    }
-
-    function getWorkerUrl(dropboxLink) {
-        const base64Link = btoa(encodeURIComponent(dropboxLink).replace(/%([0-9A-F]{2})/g,
-            function(match, p1) { return String.fromCharCode('0x' + p1); }
-        ));
-        return `${WORKER_URL}?file=${base64Link}`;
-    }
-
-    async function scanPDF() {
-        const dropboxLink = document.getElementById('dropboxLink').value.trim();
-        
-        if (!dropboxLink || !dropboxLink.includes('dropbox.com/')) {
-            setStatus('Please enter a valid Dropbox link.', 'error');
-            return;
-        }
-
-        const scanBtn = document.getElementById('scanBtn');
-        scanBtn.disabled = true;
-        scanBtn.textContent = 'Scanning...';
-        setStatus('Loading PDF... This may take a moment.', 'loading');
-
-        try {
-            const workerUrl = getWorkerUrl(dropboxLink);
-            
-            // Load the PDF
-            const loadingTask = pdfjsLib.getDocument(workerUrl);
-            pdfDoc = await loadingTask.promise;
-            totalPages = pdfDoc.numPages;
-
-            document.getElementById('pdfInfo').style.display = 'block';
-            document.getElementById('pdfInfo').innerHTML = `<strong>PDF Loaded:</strong> ${totalPages} pages`;
-
-            // Try to get the outline (table of contents)
-            const outline = await pdfDoc.getOutline();
-
-            if (outline && outline.length > 0) {
-                setStatus(`Found ${outline.length} chapters/sections in the PDF outline!`, 'success');
-                await populateChaptersFromOutline(outline);
+        // =============================================================
+        // UI HELPERS
+        // =============================================================
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const icon = document.getElementById('eyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
             } else {
-                setStatus('No outline found in this PDF. You can add chapters manually below.', 'warning');
-                addChapter(); // Add one empty row
+                input.type = 'password';
+                icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+            }
+        }
+
+        function showStatus(message, type = 'loading') {
+            const card = document.getElementById('resultsCard');
+            const bar = document.getElementById('statusBar');
+            const text = document.getElementById('statusText');
+            const body = document.getElementById('resultsBody');
+            
+            card.style.display = 'block';
+            bar.style.display = 'flex';
+            bar.className = 'status-bar ' + type;
+            text.textContent = message;
+            
+            if (type === 'loading') {
+                bar.innerHTML = `<div class="spinner"></div><span>${message}</span>`;
+            } else if (type === 'error') {
+                bar.innerHTML = `<span>❌</span><span>${message}</span>`;
+            } else if (type === 'success') {
+                bar.innerHTML = `<span>✅</span><span>${message}</span>`;
+                setTimeout(() => { bar.style.display = 'none'; }, 3000);
+            }
+        }
+
+        function hideStatus() {
+            document.getElementById('statusBar').style.display = 'none';
+        }
+
+        // =============================================================
+        // MAIN ANALYSIS FUNCTION
+        // =============================================================
+        async function analyzePDF() {
+            const password = document.getElementById('password').value;
+            const dropboxUrl = document.getElementById('dropboxUrl').value.trim();
+            
+            if (!password) {
+                showStatus('Please enter the staff password', 'error');
+                return;
+            }
+            
+            if (!dropboxUrl) {
+                showStatus('Please enter a Dropbox URL', 'error');
+                return;
             }
 
-            document.getElementById('chapterSection').classList.add('visible');
+            if (!dropboxUrl.includes('dropbox.com')) {
+                showStatus('This doesn\'t look like a Dropbox URL', 'error');
+                return;
+            }
 
-        } catch (error) {
-            console.error('Error loading PDF:', error);
-            setStatus('Error loading PDF. Make sure the Dropbox link is correct and the file is accessible.', 'error');
-        } finally {
-            scanBtn.disabled = false;
-            scanBtn.textContent = 'Scan PDF';
+            currentDropboxUrl = dropboxUrl;
+            showStatus('Loading PDF and extracting chapters...');
+            
+            try {
+                // First, get a temporary signed token to load the PDF
+                const tempResponse = await fetch(`${WORKER_URL}/sign?` + new URLSearchParams({
+                    password: password,
+                    dropbox: dropboxUrl,
+                    start: '1',
+                    end: '99999',
+                    expires: '0'
+                }));
+                
+                const tempData = await tempResponse.json();
+                
+                if (tempData.error) {
+                    showStatus(tempData.error === 'Invalid password' ? 'Incorrect password' : tempData.error, 'error');
+                    return;
+                }
+                
+                // Load PDF with temp token
+                const proxyUrl = `${WORKER_URL}?token=${tempData.token}`;
+                const pdf = await pdfjsLib.getDocument({ url: proxyUrl }).promise;
+                pdfTotalPages = pdf.numPages;
+                
+                // Get bookmarks
+                const outline = await pdf.getOutline();
+                
+                if (!outline || outline.length === 0) {
+                    showNoBookmarks();
+                    return;
+                }
+                
+                // Extract chapters
+                extractedChapters = await extractChapters(pdf, outline);
+                
+                if (extractedChapters.length === 0) {
+                    showNoBookmarks();
+                    return;
+                }
+                
+                // Sign all chapters via batch endpoint
+                showStatus('Generating secure links...');
+                await signAllChapters(password);
+                
+                // Display results
+                displayResults();
+                showStatus(`Generated ${extractedChapters.length} chapter links`, 'success');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('Error: ' + error.message, 'error');
+            }
         }
-    }
 
-    async function populateChaptersFromOutline(outline, depth = 0) {
-        const chapterList = document.getElementById('chapterList');
-        if (depth === 0) {
-            chapterList.innerHTML = '';
-        }
-
-        for (const item of outline) {
-            let pageNum = 1;
-
-            // Get the page number from the destination
-            if (item.dest) {
+        // =============================================================
+        // EXTRACT CHAPTERS
+        // =============================================================
+        async function extractChapters(pdf, outline) {
+            const chapters = [];
+            
+            for (let i = 0; i < outline.length; i++) {
+                const item = outline[i];
+                const nextItem = outline[i + 1];
+                
                 try {
-                    let dest = item.dest;
+                    let startPage = await getPageNumber(pdf, item);
+                    if (startPage === null) continue;
                     
-                    // If dest is a string, resolve it
-                    if (typeof dest === 'string') {
-                        dest = await pdfDoc.getDestination(dest);
+                    let endPage;
+                    if (nextItem) {
+                        const nextStart = await getPageNumber(pdf, nextItem);
+                        endPage = nextStart !== null ? nextStart - 1 : pdfTotalPages;
+                    } else {
+                        endPage = pdfTotalPages;
                     }
                     
-                    if (dest && dest[0]) {
-                        const pageRef = dest[0];
-                        const pageIndex = await pdfDoc.getPageIndex(pageRef);
-                        pageNum = pageIndex + 1; // Convert to 1-based
-                    }
+                    if (endPage < startPage) endPage = startPage;
+                    
+                    chapters.push({
+                        title: item.title.trim(),
+                        start: startPage,
+                        end: endPage,
+                        pageCount: endPage - startPage + 1
+                    });
                 } catch (e) {
-                    console.warn('Could not resolve destination for:', item.title, e);
+                    console.warn(`Could not process: ${item.title}`, e);
                 }
             }
-
-            // Add indent for nested items
-            const prefix = depth > 0 ? '  '.repeat(depth) + '↳ ' : '';
             
-            addChapterRow(prefix + item.title, pageNum);
+            return chapters;
+        }
 
-            // Process children (sub-chapters)
-            if (item.items && item.items.length > 0) {
-                await populateChaptersFromOutline(item.items, depth + 1);
+        async function getPageNumber(pdf, item) {
+            try {
+                let dest = item.dest;
+                if (typeof dest === 'string') dest = await pdf.getDestination(dest);
+                if (!dest || !Array.isArray(dest)) return null;
+                const pageIndex = await pdf.getPageIndex(dest[0]);
+                return pageIndex + 1;
+            } catch (e) {
+                return null;
             }
         }
 
-        // Auto-calculate end pages
-        calculateEndPages();
-    }
-
-    function calculateEndPages() {
-        const rows = document.querySelectorAll('.chapter-row');
-        const rowArray = Array.from(rows);
-
-        rowArray.forEach((row, index) => {
-            const inputs = row.querySelectorAll('.chapter-pages');
-            const startInput = inputs[0];
-            const endInput = inputs[1];
+        // =============================================================
+        // SIGN CHAPTERS VIA WORKER
+        // =============================================================
+        async function signAllChapters(password) {
+            const includeChapterName = document.getElementById('includeChapterName').checked;
+            const allowDownload = document.getElementById('allowDownload').checked;
+            const expires = parseInt(document.getElementById('expiration').value);
             
-            if (startInput.value && !endInput.value) {
-                // Look at next chapter's start page
-                if (index < rowArray.length - 1) {
-                    const nextRow = rowArray[index + 1];
-                    const nextStart = parseInt(nextRow.querySelectorAll('.chapter-pages')[0].value);
-                    if (nextStart > 1) {
-                        endInput.value = nextStart - 1;
-                    }
-                } else {
-                    // Last chapter - use total pages
-                    endInput.value = totalPages;
-                }
-            }
-        });
-    }
-
-    function addChapter() {
-        addChapterRow('', '', '');
-    }
-
-    function addChapterRow(title = '', start = '', end = '') {
-        const list = document.getElementById('chapterList');
-        const row = document.createElement('div');
-        row.className = 'chapter-row';
-        row.innerHTML = `
-            <input type="text" class="chapter-title" placeholder="Chapter title" value="${escapeHtml(title)}">
-            <input type="number" class="chapter-pages" placeholder="Start" min="1" max="${totalPages || 9999}" value="${start}">
-            <input type="number" class="chapter-pages" placeholder="End" min="1" max="${totalPages || 9999}" value="${end}">
-            <button class="remove-btn" onclick="removeChapter(this)">✕</button>
-        `;
-        list.appendChild(row);
-    }
-
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML.replace(/"/g, '&quot;');
-    }
-
-    function removeChapter(btn) {
-        const rows = document.querySelectorAll('.chapter-row');
-        if (rows.length > 1) {
-            btn.parentElement.remove();
-        }
-    }
-
-    function clearChapters() {
-        document.getElementById('chapterList').innerHTML = '';
-        addChapter();
-    }
-
-    function clearForm() {
-        document.getElementById('dropboxLink').value = '';
-        document.getElementById('bookTitle').value = '';
-        document.getElementById('chapterList').innerHTML = '';
-        document.getElementById('chapterSection').classList.remove('visible');
-        document.getElementById('results').style.display = 'none';
-        document.getElementById('pdfInfo').style.display = 'none';
-        clearStatus();
-        pdfDoc = null;
-        totalPages = 0;
-    }
-
-    function generateLinks() {
-        const dropboxLink = document.getElementById('dropboxLink').value.trim();
-        const bookTitle = document.getElementById('bookTitle').value.trim();
-
-        if (!dropboxLink) {
-            setStatus('Please enter a Dropbox link.', 'error');
-            return;
-        }
-
-        if (!bookTitle) {
-            setStatus('Please enter a book title.', 'error');
-            return;
-        }
-
-        // Encode the Dropbox link
-        let base64Link;
-        try {
-            base64Link = btoa(encodeURIComponent(dropboxLink).replace(/%([0-9A-F]{2})/g,
-                function(match, p1) { return String.fromCharCode('0x' + p1); }
-            ));
-        } catch (e) {
-            setStatus('Error encoding link.', 'error');
-            return;
-        }
-
-        const workerWithFile = `${WORKER_URL}?file=${base64Link}`;
-
-        // Gather chapters
-        const rows = document.querySelectorAll('.chapter-row');
-        const chapters = [];
-        
-        rows.forEach(row => {
-            const title = row.querySelector('.chapter-title').value.trim();
-            const inputs = row.querySelectorAll('.chapter-pages');
-            const start = parseInt(inputs[0].value);
-            const end = parseInt(inputs[1].value);
+            const chapters = extractedChapters.map(ch => ({
+                title: includeChapterName ? ch.title : '',
+                start: ch.start,
+                end: ch.end
+            }));
             
-            if (title && start && end && start <= end) {
-                chapters.push({ title, start, end });
+            const response = await fetch(`${WORKER_URL}/batch-sign`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    password,
+                    dropbox: currentDropboxUrl,
+                    chapters,
+                    download: allowDownload,
+                    expires
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.error) {
+                throw new Error(data.error);
             }
-        });
-
-        if (chapters.length === 0) {
-            setStatus('Please add at least one chapter with valid page numbers.', 'error');
-            return;
+            
+            signedTokens = data.tokens;
         }
 
-        // Build Simple List HTML
-        let simpleHtml = `<h3>${escapeHtmlOutput(bookTitle)}</h3>\n<ul>\n`;
-        
-        chapters.forEach(ch => {
-            const finalUrl = `${VIEWER_URL}?file=${encodeURIComponent(workerWithFile)}&start=${ch.start}&end=${ch.end}`;
-            simpleHtml += `  <li><a href="${finalUrl}" target="_blank" rel="noopener">${escapeHtmlOutput(ch.title)}</a></li>\n`;
+        // =============================================================
+        // DISPLAY RESULTS
+        // =============================================================
+        function displayResults() {
+            const body = document.getElementById('resultsBody');
+            const expires = parseInt(document.getElementById('expiration').value);
+            const expiresText = expires === 0 ? 'never expire' : `expire in ${expires} days`;
+            
+            let html = `
+                <div class="results-header">
+                    <div class="results-meta">${extractedChapters.length} chapters · ${pdfTotalPages} total pages · Links ${expiresText}</div>
+                    <div class="results-actions">
+                        <button class="btn btn-secondary btn-sm" onclick="copyAllUrls()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            Copy All URLs
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="exportCSV()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Export CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="chapter-list">
+            `;
+            
+            extractedChapters.forEach((chapter, i) => {
+                const token = signedTokens[i];
+                html += `
+                    <div class="chapter-item">
+                        <div class="chapter-info">
+                            <div class="chapter-title">${escapeHtml(chapter.title)}</div>
+                            <div class="chapter-meta">Pages ${chapter.start}–${chapter.end} · ${chapter.pageCount} pages</div>
+                        </div>
+                        <div class="chapter-actions">
+                            <button class="btn btn-secondary btn-icon tooltip" onclick="copyUrl(${i}, this)" title="Copy URL">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                <span class="tooltip-text">Copy link</span>
+                            </button>
+                            <button class="btn btn-secondary btn-icon tooltip" onclick="copyEmbed(${i}, this)" title="Copy Embed Code">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                                <span class="tooltip-text">Copy embed code</span>
+                            </button>
+                            <button class="btn btn-secondary btn-icon tooltip" onclick="previewChapter(${i})" title="Preview">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                <span class="tooltip-text">Open preview</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            body.innerHTML = html;
+        }
+
+        function showNoBookmarks() {
+            const body = document.getElementById('resultsBody');
+            body.innerHTML = `
+                <div class="empty-state">
+                    <h3>No Chapter Bookmarks Found</h3>
+                    <p>This PDF doesn't have top-level bookmarks. Add bookmarks to the PDF first using your bookmark tool.</p>
+                </div>
+            `;
+            hideStatus();
+        }
+
+        // =============================================================
+        // COPY / EXPORT FUNCTIONS
+        // =============================================================
+        function getChapterUrl(index) {
+            return `${VIEWER_URL}?token=${encodeURIComponent(signedTokens[index].token)}`;
+        }
+
+        function copyUrl(index, btn) {
+            const url = getChapterUrl(index);
+            copyToClipboard(url, btn);
+        }
+
+        function copyEmbed(index, btn) {
+            const chapter = extractedChapters[index];
+            const url = getChapterUrl(index);
+            
+            const embed = `<!-- ${chapter.title} (Pages ${chapter.start}-${chapter.end}) -->
+<div style="text-align: right; margin-bottom: 8px;">
+    <a href="${url}" target="_blank" rel="noopener" style="text-decoration: none; color: #333; font-family: sans-serif; font-size: 0.9em; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; background-color: #f9f9f9;">
+        <span style="font-size: 1.1em; margin-right: 4px;">↗</span> Open Chapter
+    </a>
+</div>
+<iframe src="${url}" width="100%" height="700" style="border: 1px solid #ccc; border-radius: 4px;" referrerpolicy="origin" allowfullscreen></iframe>`;
+            
+            copyToClipboard(embed, btn);
+        }
+
+        function previewChapter(index) {
+            window.open(getChapterUrl(index), '_blank');
+        }
+
+        function copyAllUrls() {
+            const lines = extractedChapters.map((ch, i) => 
+                `${ch.title}\n${getChapterUrl(i)}`
+            ).join('\n\n');
+            
+            navigator.clipboard.writeText(lines).then(() => {
+                showStatus('All URLs copied to clipboard!', 'success');
+            });
+        }
+
+        function exportCSV() {
+            let csv = 'Chapter Title,Start Page,End Page,Page Count,URL\n';
+            
+            extractedChapters.forEach((ch, i) => {
+                const url = getChapterUrl(i);
+                csv += `"${ch.title.replace(/"/g, '""')}",${ch.start},${ch.end},${ch.pageCount},"${url}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'chapter-links.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function copyToClipboard(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                btn.classList.add('copied');
+                setTimeout(() => btn.classList.remove('copied'), 2000);
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Enter key handlers
+        document.getElementById('dropboxUrl').addEventListener('keypress', e => {
+            if (e.key === 'Enter') analyzePDF();
         });
         
-        simpleHtml += `</ul>`;
-
-        // Build Styled List HTML
-        let styledHtml = `<style>
-.chapter-list { font-family: sans-serif; max-width: 600px; }
-.chapter-list h3 { margin-bottom: 16px; color: #111; }
-.chapter-list ul { list-style: none; padding: 0; margin: 0; }
-.chapter-list li { 
-    border: 1px solid #ddd; 
-    border-radius: 6px; 
-    margin-bottom: 8px; 
-    transition: all 0.2s;
-}
-.chapter-list li:hover { 
-    border-color: #0061fe; 
-    box-shadow: 0 2px 8px rgba(0,97,254,0.15);
-}
-.chapter-list a { 
-    display: block;
-    padding: 14px 18px;
-    text-decoration: none; 
-    color: #333;
-    font-weight: 500;
-}
-.chapter-list a:hover { color: #0061fe; }
-.chapter-list .pages {
-    font-size: 0.85em;
-    color: #888;
-    font-weight: 400;
-    margin-left: 8px;
-}
-</style>
-
-<div class="chapter-list">
-  <h3>${escapeHtmlOutput(bookTitle)}</h3>
-  <ul>
-`;
-        
-        chapters.forEach(ch => {
-            const finalUrl = `${VIEWER_URL}?file=${encodeURIComponent(workerWithFile)}&start=${ch.start}&end=${ch.end}`;
-            const pageCount = ch.end - ch.start + 1;
-            styledHtml += `    <li><a href="${finalUrl}" target="_blank" rel="noopener">${escapeHtmlOutput(ch.title)}<span class="pages">(${pageCount} pages)</span></a></li>\n`;
+        document.getElementById('password').addEventListener('keypress', e => {
+            if (e.key === 'Enter') document.getElementById('dropboxUrl').focus();
         });
-        
-        styledHtml += `  </ul>
-</div>`;
-
-        document.getElementById('listOutput').textContent = simpleHtml;
-        document.getElementById('styledOutput').textContent = styledHtml;
-        document.getElementById('results').style.display = 'block';
-        
-        clearStatus();
-        
-        // Scroll to results
-        document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function escapeHtmlOutput(text) {
-        return text
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
-    }
-
-    function copyToClipboard(elementId, btnElement) {
-        const text = document.getElementById(elementId).textContent;
-        navigator.clipboard.writeText(text).then(() => {
-            const originalText = btnElement.textContent;
-            btnElement.textContent = 'Copied!';
-            btnElement.style.background = '#d1e7dd';
-            btnElement.style.borderColor = '#badbcc';
-            btnElement.style.color = '#0f5132';
-            setTimeout(() => {
-                btnElement.textContent = originalText;
-                btnElement.style.background = 'white';
-                btnElement.style.borderColor = '#ccc';
-                btnElement.style.color = '#333';
-            }, 2000);
-        });
-    }
-
-    // Enter key triggers scan
-    document.getElementById('dropboxLink').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') scanPDF();
-    });
-</script>
-
+    </script>
 </body>
 </html>
+
