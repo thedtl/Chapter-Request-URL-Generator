@@ -587,10 +587,7 @@
             </div>
             
             <!-- Status Bar -->
-            <div class="status-bar" id="statusBar" style="display: none;">
-                <div class="spinner"></div>
-                <span id="statusText">Loading...</span>
-            </div>
+            <div class="status-bar" id="statusBar" style="display: none;"></div>
             
             <div class="card-body" id="resultsBody">
                 <!-- Results populate here -->
@@ -637,13 +634,10 @@
         function showStatus(message, type = 'loading') {
             const card = document.getElementById('resultsCard');
             const bar = document.getElementById('statusBar');
-            const text = document.getElementById('statusText');
-            const body = document.getElementById('resultsBody');
             
             card.style.display = 'block';
             bar.style.display = 'flex';
             bar.className = 'status-bar ' + type;
-            text.textContent = message;
             
             if (type === 'loading') {
                 bar.innerHTML = `<div class="spinner"></div><span>${message}</span>`;
@@ -966,5 +960,3 @@
     </script>
 </body>
 </html>
-
-
